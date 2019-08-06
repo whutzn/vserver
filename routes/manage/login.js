@@ -1,17 +1,17 @@
-let express = require("express"),
- router = express.Router();
+var express = require("express");
+var router = express.Router();
 
 // user login
-let login = router.route("/login");
+var login = router.route("/login");
 
 login.post(function(req, res, next) {
-  let phone = req.query.phone,
-   password = req.query.password;
+  var phone = req.query.account;
+  var password = req.query.password;
 
   req.getConnection(function(err, conn) {
     if (err) return next(err);
 
-    let sql = "SELECT password FROM user WHERE phone = ? ";
+    var sql = "SELECT pwd FROM usr WHERE user = ? ";
 
     conn.query(sql, [phone], function(err, rows) {
       if (err) return next("login error" + err);
@@ -23,7 +23,7 @@ login.post(function(req, res, next) {
             desc: "no user"
           })
         );
-      } else if (rows[0].password != password) {
+      } else if (rows[0].pwd != password) {
         res.send(
           JSON.stringify({
             code: 1,
