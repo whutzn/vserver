@@ -1,14 +1,14 @@
 let express = require("express"),
-  path = require("path"),
-  bodyParser = require("body-parser"),
-  expressValidator = require("express-validator"),
-  connection = require("express-myconnection"),
-  mysql = require("mysql"),
-  cors = require("cors"),
-  routes = require("./routes"),
-  config = require("./config"),
-  logger = require("morgan"),
-  app = express();
+    path = require("path"),
+    bodyParser = require("body-parser"),
+    expressValidator = require("express-validator"),
+    connection = require("express-myconnection"),
+    mysql = require("mysql"),
+    cors = require("cors"),
+    routes = require("./routes"),
+    config = require("./config"),
+    logger = require("morgan"),
+    app = express();
 
 app.set("views", "./views");
 app.set("view engine", "ejs");
@@ -22,7 +22,7 @@ app.use(expressValidator());
 app.use(connection(mysql, config.getDbConfig(), "request"));
 
 app.get("/", function(req, res) {
-  res.send("video server");
+    res.send("video server");
 });
 
 routes(app);
