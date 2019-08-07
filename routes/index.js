@@ -16,4 +16,5 @@ module.exports = function(app) {
     app.use("/admin", require("./manage/login"));
     app.use("/admin", require("./manage/maininfo"));
     app.use("/admin", require("./manage/upload"));
+    app.use("/admin/city", require("./manage/city"));
 };

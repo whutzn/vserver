@@ -1,7 +1,6 @@
 let express = require("express"),
  router = express.Router();
 
-// user login
 let login = router.route("/login");
 
 login.post(function(req, res, next) {
@@ -31,12 +30,16 @@ login.post(function(req, res, next) {
           })
         );
       } else {
-        res.send(
-          JSON.stringify({
-            code: 0,
-            desc: "login success"
-          })
-        );
+        let cursql = "INSERT INTO login(phone,time) VALUES (?, NOW());";
+        conn.query(cursql,[phone], function(err,rows) {
+          if(err) return next(err);
+          res.send(
+            JSON.stringify({
+              code: 0,
+              desc: "login success"
+            })
+          );
+        });
       }
     });
   });
