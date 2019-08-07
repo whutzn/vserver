@@ -31,7 +31,12 @@ var getVisitInfo = router.route("/getvisitinfo");
 getVisitInfo.get(function(req, res, next) {
     req.getConnection(function(err, conn) {
         if (err) return next(err);
-
+        res.send(
+            JSON.stringify({
+                code: 0,
+                desc: 'getvisitinfo'
+            })
+        );
     });
 });
 

@@ -6,7 +6,7 @@ function getDbConfig() {
         host: 'localhost',
         port: 3306,
         user: 'gisdb',
-        password: 'qq123456',
+        password: '1234Qwer',
         database: 'gistest',
         multipleStatements: true
     }
