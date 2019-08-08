@@ -69,7 +69,7 @@ removeCity.post(function(req, res, next) {
 
 var updateCity = router.route("/updatecity");
 
-updateCity.get(function(req, res, next) {
+updateCity.post(function(req, res, next) {
 
   let id = req.query.id,
   name = req.query.name,
