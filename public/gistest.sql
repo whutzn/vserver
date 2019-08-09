@@ -11,11 +11,26 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 07/08/2019 20:05:58
+ Date: 09/08/2019 16:29:45
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for agency
+-- ----------------------------
+DROP TABLE IF EXISTS `agency`;
+CREATE TABLE `agency`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `desc` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of agency
+-- ----------------------------
+INSERT INTO `agency` VALUES (1, 'agency');
 
 -- ----------------------------
 -- Table structure for building_info
@@ -41,7 +56,7 @@ CREATE TABLE `city`  (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of city
@@ -62,7 +77,7 @@ CREATE TABLE `devices`  (
   `latitude` float(100, 10) NULL DEFAULT NULL,
   `status` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of devices
@@ -217,13 +232,28 @@ CREATE TABLE `login`  (
   `phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of login
 -- ----------------------------
 INSERT INTO `login` VALUES (1, '123456', '2019-08-07 18:33:52');
 INSERT INTO `login` VALUES (2, '13264701227', '2019-08-07 18:38:29');
+
+-- ----------------------------
+-- Table structure for member_info
+-- ----------------------------
+DROP TABLE IF EXISTS `member_info`;
+CREATE TABLE `member_info`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `desc` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of member_info
+-- ----------------------------
+INSERT INTO `member_info` VALUES (1, 'test buy');
 
 -- ----------------------------
 -- Table structure for newdevice
@@ -247,7 +277,7 @@ CREATE TABLE `newdevice`  (
   `coords` point NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   SPATIAL INDEX `spatIdx`(`coords`)
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 153 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of newdevice
@@ -404,6 +434,21 @@ INSERT INTO `newdevice` VALUES (149, '118', '15.144.44.107', '自然博物馆北
 INSERT INTO `newdevice` VALUES (150, '119', '15.144.44.107', '自然博物馆北京西路门PT2', '8000', '101', '31010601001310010949', '31010601002160081360', '31.23572', '121.45943', '1DB07EF70C7CFE407344016B99286F1C', '6', 'admin', '31010601001310010949', ST_GeomFromText('POINT(121.459 31.2357)'));
 INSERT INTO `newdevice` VALUES (151, '60', '15.144.21.202', '自然博物馆地铁口ZG', '8000', '101', '31010601001310016516', '31010601002160081360', '31.2378', '121.45844', '3F289459B1F731758B0F897681F41498', '6', 'admin', '31010601001310016516', ST_GeomFromText('POINT(121.458 31.2378)'));
 INSERT INTO `newdevice` VALUES (152, '72', '15.144.72.13', '自然博物馆南门ZY', '8000', '101', '31010601001310017517', '31010601002160081360', '31.23752', '121.4581', '3F289459B1F731758B0F897681F41498', '6', 'admin', '31010601001310017517', ST_GeomFromText('POINT(121.458 31.2375)'));
+
+-- ----------------------------
+-- Table structure for notice
+-- ----------------------------
+DROP TABLE IF EXISTS `notice`;
+CREATE TABLE `notice`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `desc` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of notice
+-- ----------------------------
+INSERT INTO `notice` VALUES (1, 'safasfafsasfadasdadqfsagg');
 
 -- ----------------------------
 -- Table structure for samples
@@ -631,7 +676,7 @@ CREATE TABLE `usr`  (
   `user` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `pwd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of usr
