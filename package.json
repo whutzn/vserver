@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node-dev --inspect ./bin/www"
+        "start": "node --inspect ./bin/www"
     },
     "license": "ISC",
     "dependencies": {
@@ -17,6 +17,7 @@
         "express": "^4.17.1",
         "express-myconnection": "^1.0.4",
         "express-validator": "^5.3.1",
+        "ffmpeg": "0.0.4",
         "fluent-ffmpeg": "^2.1.2",
         "log4js": "^4.5.0",
         "md5": "^2.2.1",
