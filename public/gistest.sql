@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 09/08/2019 16:29:45
+ Date: 10/08/2019 12:13:18
 */
 
 SET NAMES utf8mb4;
@@ -222,6 +222,35 @@ CREATE TABLE `invitecode`  (
 INSERT INTO `invitecode` VALUES (1, '13264701227', 'f8a425369', '2019-07-31 16:11:19');
 INSERT INTO `invitecode` VALUES (3, '13264701228', '1425da13d', '2019-07-31 16:11:37');
 INSERT INTO `invitecode` VALUES (8, '13264701229', 'bf92beff1', '2019-07-31 16:44:29');
+
+-- ----------------------------
+-- Table structure for level1
+-- ----------------------------
+DROP TABLE IF EXISTS `level1`;
+CREATE TABLE `level1`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `className` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `level` int(5) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of level1
+-- ----------------------------
+INSERT INTO `level1` VALUES (4, 'hankou', 1);
+INSERT INTO `level1` VALUES (5, 'hankou', 1);
+
+-- ----------------------------
+-- Table structure for level2
+-- ----------------------------
+DROP TABLE IF EXISTS `level2`;
+CREATE TABLE `level2`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `className` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `level` int(5) NULL DEFAULT NULL,
+  `parent` int(5) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for login
