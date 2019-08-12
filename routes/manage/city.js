@@ -13,10 +13,10 @@ getCityList.get(function(req, res, next) {
         conn.query(sql, [], function(err, rows) {
             if (err) return next("get city list error" + err);
             res.send(
-              JSON.stringify({
-                code: 0,
-                desc: rows
-              })
+                JSON.stringify({
+                    code: 0,
+                    desc: rows
+                })
             );
         });
     });
@@ -25,20 +25,20 @@ getCityList.get(function(req, res, next) {
 var addCity = router.route("/addcity");
 
 addCity.post(function(req, res, next) {
-  let name = req.query.name,
-  info = req.query.info;
+    let name = req.query.name,
+        info = req.query.info;
     req.getConnection(function(err, conn) {
         if (err) return next(err);
 
         var sql = "INSERT INTO city(name,info) VALUES (?,?);";
 
-        conn.query(sql, [name,info], function(err, rows) {
+        conn.query(sql, [name, info], function(err, rows) {
             if (err) return next("add city error" + err);
             res.send(
-              JSON.stringify({
-                code: 0,
-                desc: 'add city success'
-              })
+                JSON.stringify({
+                    code: 0,
+                    desc: rows.insertId
+                })
             );
         });
     });
@@ -48,7 +48,7 @@ var removeCity = router.route("/removecity");
 
 removeCity.post(function(req, res, next) {
 
-  let id = req.query.id;
+    let id = req.query.id;
 
     req.getConnection(function(err, conn) {
         if (err) return next(err);
@@ -58,36 +58,36 @@ removeCity.post(function(req, res, next) {
         conn.query(sql, [id], function(err, rows) {
             if (err) return next("remove city error" + err);
             res.send(
-              JSON.stringify({
-                code: 0,
-                desc: 'remove success'
-              })
+                JSON.stringify({
+                    code: 0,
+                    desc: 'remove success'
+                })
             );
         });
     });
 });
 
-var updateCity = router.route("/updatecity");
+var updateCity = router.route("/setcity");
 
 updateCity.post(function(req, res, next) {
 
-  let id = req.query.id,
-  name = req.query.name,
-  info = req.query.info;
-   
+    let id = req.query.id,
+        name = req.query.name,
+        info = req.query.info;
+
 
     req.getConnection(function(err, conn) {
         if (err) return next(err);
 
         var sql = "UPDATE city SET name = ? , info = ? WHERE id = ?";
 
-        conn.query(sql, [name,info,id], function(err, rows) {
-            if (err) return next("update city error" + err);
+        conn.query(sql, [name, info, id], function(err, rows) {
+            if (err) return next("set city error" + err);
             res.send(
-              JSON.stringify({
-                code: 0,
-                desc: 'update success'
-              })
+                JSON.stringify({
+                    code: 0,
+                    desc: 'set city success'
+                })
             );
         });
     });
