@@ -16,20 +16,22 @@
 		<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script>
 		function uploadFile(){
-		  	var file = document.getElementById("file")
-		  	var formData = new FormData();
-		  	for(var i in file.files){//这里如果单张上传就不必遍历直接formData.append('file',file.files[0])
-		            formData.append('file',file.files[i]);
-		  	}
+		  var file = document.getElementById("file")
+		  var formData = new FormData();
+			for(var i in file.files){//这里如果单张上传就不必遍历直接formData.append('file',file.files[0])
+			  console.log('file',file.files[i]);
+				formData.append('file',file.files[i]);
+			}
+			formData.append('name','biaoti');
 			$.ajax({
-			    url: '/upload',
+			    url: 'http://localhost:3000/admin/upload_file',
 			    type: 'POST',
 			    data: formData,
 			    cache: false,
 			    contentType: false,
 			    processData: false,
 			    success: function(data){
-			      	if(200 === data.code) {
+			      	if(0 === data.code) {
 			        	$('#result').html("上传成功！");
 			        	$('#img').attr('src',data.data);
 			      	} else {
