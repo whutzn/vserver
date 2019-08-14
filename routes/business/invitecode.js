@@ -71,12 +71,17 @@ bindCode.post(function(req, res, next) {
     conn.query(sql, [uid,code], function(err, rows) {
       if (err) return next("bind invite code error" + err);
       if(rows[0].affectedRows == 1) {
-        res.send(
-          JSON.stringify({
-            code: 0,
-            desc: 'bind code success'
-          })
-        );
+        let vipsql = "UPDATE `user` SET vtime = DATE_ADD( vtime, INTERVAL 30 DAY ) WHERE id = "+ uid +" AND DATE_ADD( vtime, INTERVAL 1 DAY ) > NOW() ;UPDATE `user` SET vtime = DATE_ADD( NOW(), INTERVAL 30 DAY ) WHERE id = "+uid+ " AND (vtime < NOW() OR vtime IS NULL);";
+        conn.query(vipsql,[], function(err, rows1){
+          // console.log(rows1);
+          if (err) return next("set code error" + err);
+          res.send(
+            JSON.stringify({
+              code: 0,
+              desc: 'bind code success'
+            })
+          );
+        });
       }else if(rows[0].affectedRows == 0) {
         if(rows[1].length == 0) {
           res.send(

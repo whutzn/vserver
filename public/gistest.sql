@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 10/08/2019 12:13:18
+ Date: 14/08/2019 20:15:35
 */
 
 SET NAMES utf8mb4;
@@ -56,7 +56,7 @@ CREATE TABLE `city`  (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of city
@@ -77,7 +77,7 @@ CREATE TABLE `devices`  (
   `latitude` float(100, 10) NULL DEFAULT NULL,
   `status` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of devices
@@ -118,7 +118,7 @@ CREATE TABLE `feature`  (
   `device` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `time` datetime(6) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 138 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 79 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of feature
@@ -209,19 +209,26 @@ INSERT INTO `feature` VALUES (79, 98, '382:-90,55507:-80,55510:-95', 'MI 6', '20
 DROP TABLE IF EXISTS `invitecode`;
 CREATE TABLE `invitecode`  (
   `id` int(20) NOT NULL AUTO_INCREMENT,
-  `phone` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `uid` int(10) NULL DEFAULT NULL,
   `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `addtime` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `phone`(`phone`) USING BTREE
+  `usetime` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of invitecode
 -- ----------------------------
-INSERT INTO `invitecode` VALUES (1, '13264701227', 'f8a425369', '2019-07-31 16:11:19');
-INSERT INTO `invitecode` VALUES (3, '13264701228', '1425da13d', '2019-07-31 16:11:37');
-INSERT INTO `invitecode` VALUES (8, '13264701229', 'bf92beff1', '2019-07-31 16:44:29');
+INSERT INTO `invitecode` VALUES (1, 7, '2ff737b8', '2019-08-14 15:15:53', '2019-08-14 16:10:05');
+INSERT INTO `invitecode` VALUES (2, 1, '9be4a33d', '2019-08-14 15:15:53', '2019-08-14 20:06:59');
+INSERT INTO `invitecode` VALUES (3, 3, 'a318880b', '2019-08-14 15:15:53', '2019-08-14 15:41:18');
+INSERT INTO `invitecode` VALUES (4, 1, 'f69a99dd', '2019-08-14 15:15:53', '2019-08-14 20:07:45');
+INSERT INTO `invitecode` VALUES (5, 1, 'f60eac6f', '2019-08-14 15:15:53', '2019-08-14 15:30:02');
+INSERT INTO `invitecode` VALUES (6, 1, '5ca986bf', '2019-08-14 15:15:53', '2019-08-14 20:10:07');
+INSERT INTO `invitecode` VALUES (7, 1, '5d61fdfd', '2019-08-14 15:15:53', '2019-08-14 20:13:06');
+INSERT INTO `invitecode` VALUES (8, NULL, 'e0f77536', '2019-08-14 15:15:53', NULL);
+INSERT INTO `invitecode` VALUES (9, NULL, '9306c3a6', '2019-08-14 15:15:53', NULL);
+INSERT INTO `invitecode` VALUES (10, NULL, 'a1187f56', '2019-08-14 15:15:53', NULL);
 
 -- ----------------------------
 -- Table structure for level1
@@ -232,7 +239,7 @@ CREATE TABLE `level1`  (
   `className` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `level` int(5) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of level1
@@ -250,7 +257,7 @@ CREATE TABLE `level2`  (
   `level` int(5) NULL DEFAULT NULL,
   `parent` int(5) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for login
@@ -261,13 +268,19 @@ CREATE TABLE `login`  (
   `phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of login
 -- ----------------------------
 INSERT INTO `login` VALUES (1, '123456', '2019-08-07 18:33:52');
 INSERT INTO `login` VALUES (2, '13264701227', '2019-08-07 18:38:29');
+INSERT INTO `login` VALUES (3, '13264701227', '2019-08-14 14:43:17');
+INSERT INTO `login` VALUES (4, '13264701227', '2019-08-14 14:47:16');
+INSERT INTO `login` VALUES (5, '13264701227', '2019-08-14 19:32:07');
+INSERT INTO `login` VALUES (6, '13264701227', '2019-08-14 19:33:28');
+INSERT INTO `login` VALUES (7, '13264701227', '2019-08-14 19:33:49');
+INSERT INTO `login` VALUES (8, '13264701227', '2019-08-14 19:34:08');
 
 -- ----------------------------
 -- Table structure for member_info
@@ -306,7 +319,7 @@ CREATE TABLE `newdevice`  (
   `coords` point NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   SPATIAL INDEX `spatIdx`(`coords`)
-) ENGINE = InnoDB AUTO_INCREMENT = 153 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 152 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of newdevice
@@ -653,6 +666,7 @@ INSERT INTO `samples` VALUES (152, 30.4278733845, 114.4177373374, 1);
 DROP TABLE IF EXISTS `uploadfiles`;
 CREATE TABLE `uploadfiles`  (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `videoname` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `fieldname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `filename` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `encoding` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -661,20 +675,19 @@ CREATE TABLE `uploadfiles`  (
   `filepath` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `addTime` datetime(2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of uploadfiles
 -- ----------------------------
-INSERT INTO `uploadfiles` VALUES (1, 'file', 'Chrysanthemum.jpg', '7bit', 'image/jpeg', 879394, 'public\\upload\\Chrysanthemum.jpg', '2019-08-07 14:30:54.61');
-INSERT INTO `uploadfiles` VALUES (2, 'file', 'Desert.jpg', '7bit', 'image/jpeg', 845941, 'public\\upload\\Desert.jpg', '2019-08-07 14:33:40.96');
-INSERT INTO `uploadfiles` VALUES (3, 'file', 'Desert.jpg', '7bit', 'image/jpeg', 845941, 'public\\upload\\Desert.jpg', '2019-08-07 14:37:21.98');
-INSERT INTO `uploadfiles` VALUES (4, 'file', 'Hydrangeas.jpg', '7bit', 'image/jpeg', 595284, 'public\\upload\\Hydrangeas.jpg', '2019-08-07 14:37:21.98');
-INSERT INTO `uploadfiles` VALUES (5, 'file', '002.mp4', '7bit', 'video/mp4', 764024, 'public\\upload\\002.mp4', '2019-08-07 15:19:12.19');
-INSERT INTO `uploadfiles` VALUES (6, 'file', '003.mp4', '7bit', 'video/mp4', 7670206, 'public\\upload\\003.mp4', '2019-08-07 15:19:12.19');
-INSERT INTO `uploadfiles` VALUES (7, 'file', 'Ours-Dizzy.mp3', '7bit', 'audio/mp3', 10889888, 'public\\upload\\Ours-Dizzy.mp3', '2019-08-07 15:20:43.27');
-INSERT INTO `uploadfiles` VALUES (8, 'file', 'Sam Smith-Stay With Me.flac', '7bit', 'audio/flac', 17904168, 'public\\upload\\Sam Smith-Stay With Me.flac', '2019-08-07 15:28:35.81');
-INSERT INTO `uploadfiles` VALUES (9, 'file', '李荣浩-年少有为.mp3', '7bit', 'audio/mp3', 11654745, 'public\\upload\\李荣浩-年少有为.mp3', '2019-08-07 15:28:35.81');
+INSERT INTO `uploadfiles` VALUES (1, NULL, 'file', 'Chrysanthemum.jpg', '7bit', 'image/jpeg', 879394, 'public\\upload\\Chrysanthemum.jpg', '2019-08-07 14:30:54.61');
+INSERT INTO `uploadfiles` VALUES (4, NULL, 'file', 'Hydrangeas.jpg', '7bit', 'image/jpeg', 595284, 'public\\upload\\Hydrangeas.jpg', '2019-08-07 14:37:21.98');
+INSERT INTO `uploadfiles` VALUES (5, NULL, 'file', '002.mp4', '7bit', 'video/mp4', 764024, 'public\\upload\\002.mp4', '2019-08-07 15:19:12.19');
+INSERT INTO `uploadfiles` VALUES (6, NULL, 'file', '003.mp4', '7bit', 'video/mp4', 7670206, 'public\\upload\\003.mp4', '2019-08-07 15:19:12.19');
+INSERT INTO `uploadfiles` VALUES (7, NULL, 'file', 'Ours-Dizzy.mp3', '7bit', 'audio/mp3', 10889888, 'public\\upload\\Ours-Dizzy.mp3', '2019-08-07 15:20:43.27');
+INSERT INTO `uploadfiles` VALUES (8, NULL, 'file', 'Sam Smith-Stay With Me.flac', '7bit', 'audio/flac', 17904168, 'public\\upload\\Sam Smith-Stay With Me.flac', '2019-08-07 15:28:35.81');
+INSERT INTO `uploadfiles` VALUES (9, NULL, 'file', '李荣浩-年少有为.mp3', '7bit', 'audio/mp3', 11654745, 'public\\upload\\李荣浩-年少有为.mp3', '2019-08-07 15:28:35.81');
+INSERT INTO `uploadfiles` VALUES (11, NULL, 'file', 'Lighthouse.jpg', '7bit', 'image/jpeg', 561276, 'public\\upload\\Lighthouse.jpg', '2019-08-13 19:08:59.12');
 
 -- ----------------------------
 -- Table structure for user
@@ -684,6 +697,7 @@ CREATE TABLE `user`  (
   `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `password` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `vtime` date NULL DEFAULT NULL,
   `time` datetime(6) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `phone`(`phone`) USING BTREE
@@ -692,9 +706,10 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '13264701227', '12345678', '2019-07-30 10:13:36.000000');
-INSERT INTO `user` VALUES (5, '13264701228', '12345678', '2019-07-30 10:44:10.000000');
-INSERT INTO `user` VALUES (7, '13264701229', 'qq12345', '2019-07-31 18:11:21.000000');
+INSERT INTO `user` VALUES (1, '13264701227', '12345678', '2019-11-12', '2019-07-30 10:13:36.000000');
+INSERT INTO `user` VALUES (5, '13264701228', '12345678', '2019-08-15', '2019-07-30 10:44:10.000000');
+INSERT INTO `user` VALUES (7, '13264701229', 'qq12345', '2019-08-13', '2019-07-31 18:11:21.000000');
+INSERT INTO `user` VALUES (12, '11123412414', '2323535', '2019-08-14', '2019-08-14 18:56:27.000000');
 
 -- ----------------------------
 -- Table structure for usr
@@ -705,7 +720,7 @@ CREATE TABLE `usr`  (
   `user` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `pwd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of usr

@@ -10,7 +10,7 @@ login.post(function(req, res, next) {
   req.getConnection(function(err, conn) {
     if (err) return next(err);
 
-    let sql = "SELECT * FROM user WHERE phone = ? ";
+    let sql = "SELECT id,password,DATE_ADD( vtime, INTERVAL 1 DAY ) AS ctime FROM user WHERE phone = ? ";
 
     conn.query(sql, [phone], function(err, rows1) {
       if (err) return next("login error" + err);
@@ -33,11 +33,14 @@ login.post(function(req, res, next) {
         let cursql = "INSERT INTO login(phone,time) VALUES (?, NOW());";
         conn.query(cursql,[phone], function(err,rows2) {
           if(err) return next(err);
+          let type = 0;
+          if(new Date(rows1[0].ctime) >= new Date()) type = 1;
           res.send(
             JSON.stringify({
               code: 0,
               desc: {
-                id: rows1[0].id
+                id: rows1[0].id,
+                type: type
               }
             })
           );
