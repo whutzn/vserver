@@ -1,6 +1,3 @@
-/**
- * 下载指纹数据集
- */
 let express = require("express"),
   router = express.Router(),
   util = require("./config/index");
