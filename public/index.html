@@ -1,60 +1,61 @@
-
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-	</head>
-	<body>
-		<div class="form-group">
-		   <label>Ajax上传图片</label>
-		   <input type="file" name="file" id="file" multiple="multiple">
-		    	<p id="result"></p>
-		   <img id="img" src="">
-		</div>
-		<button id="upload" class="btn btn-default">提交</button>
-		<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-		<script>
-		function uploadFile(){
-		  var file = document.getElementById("file")
-		  var formData = new FormData();
-			for(var i in file.files){//这里如果单张上传就不必遍历直接formData.append('file',file.files[0])
-			  console.log('file',file.files[i]);
-				formData.append('file',file.files[i]);
-			}
-			formData.append('name','biaoti');
-			$.ajax({
-			    url: 'http://localhost:3000/admin/upload_file',
-			    type: 'POST',
-			    data: formData,
-			    cache: false,
-			    contentType: false,
-			    processData: false,
-			    success: function(data){
-			      	if(0 === data.code) {
-			        	$('#result').html("上传成功！");
-			        	$('#img').attr('src',data.data);
-			      	} else {
-			        	$('#result').html("上传失败！");
-			      	}
-			      	console.log('imgUploader upload success');
-		    	},
-		    	error: function(){
-			      	$("#result").html("与服务器通信发生错误");
-			    }
-			});
-		}
-		
-		function postPage() {
-	        var uploada = document.getElementById('upload');
-	        uploada.addEventListener("click",function () {
-	            uploadFile();
-	        },false);
-		}
-		
-		window.onload = function () {
-		    postPage();
-		}
-		</script>
-	</body>
-</html> 
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <div class="form-group">
+        <label>Ajax上传图片</label>
+        <input type="file" name="file" id="file" multiple="multiple">
+        <p id="result"></p>
+        <img id="img" src="">
+    </div>
+    <button id="upload" class="btn btn-default">提交</button>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        function uploadFile() {
+            var file = document.getElementById("file")
+            var formData = new FormData();
+            for (var i in file.files) { //这里如果单张上传就不必遍历直接formData.append('file',file.files[0])
+                console.log('file', file.files[i]);
+                formData.append('file', file.files[i]);
+            }
+            $.ajax({
+                url: 'http://localhost:3000/admin/uploadadfile',
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (0 === data.code) {
+                        $('#result').html("上传成功！");
+                        $('#img').attr('src', data.data);
+                    } else {
+                        $('#result').html("上传失败！");
+                    }
+                    console.log('imgUploader upload success');
+                },
+                error: function() {
+                    $("#result").html("与服务器通信发生错误");
+                }
+            });
+        }
+
+        function postPage() {
+            var uploada = document.getElementById('upload');
+            uploada.addEventListener("click", function() {
+                uploadFile();
+            }, false);
+        }
+
+        window.onload = function() {
+            postPage();
+        }
+    </script>
+</body>
+
+</html>
