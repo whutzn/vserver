@@ -2,6 +2,7 @@ let express = require("express"),
     router = express.Router(),
     multer = require("multer"),
     fs = require("fs"),
+    ffmpeg = require("ffmpeg"),
     storage = multer.diskStorage({
         destination: function(req, file, cb) {
             cb(null, "./public/upload");
@@ -32,34 +33,67 @@ uploadfile.post(upload.array("file", 20), function(req, res, next) {
             ];
             arr.push(metadata);
         }
-        if(req.files.length == 1) {
-            //获取第一帧图片
-        }else if (req.files.length == 2) {
-            if(arr[1].mimetype.indexOf("video") >= 0) {
-                arr.reverse();
-            }
-        }
-
         let addSQL = "INSERT INTO videofiles(filename, encoding, mimetype, size, filepath, addTime) VALUES ?";
+        if (req.files.length == 1) {
+            //获取第一帧图片
+            let process = new ffmpeg('./public/upload/' + req.files[0].originalname),
+                picName = arr[0][0].split('.')[0];
+            process.then(function(video) {
+                video.fnExtractFrameToJPG('./public/upload/', {
+                    frame_rate: 1,
+                    number: 1,
+                    file_name: picName
+                }, function(error, files) {
+                    if (!error) {
+                        // console.log('Frames: ' + files);
+                        arr.push([picName + '_1.jpg', '7bit', 'image/jpg', 102400, 'public/upload/' + picName + '_1.jpg', new Date()])
+                        conn.query(addSQL, [arr], function(err, rows) {
+                            // console.log('video', rows);
+                            if (err) {
+                                res.send({
+                                    code: 1,
+                                    desc: "upload video error"
+                                });
+                                return next("query error" + err);
+                            } else {
+                                res.send({
+                                    code: 0,
+                                    desc: {
+                                        vid: rows.insertId,
+                                        pid: rows.insertId + 1
+                                    }
+                                });
+                            }
+                        });
+                    }
 
-        conn.query(addSQL, [arr], function(err, rows) {
-            console.log('video',rows);
-            if (err) {
-                res.send({
-                    code: 1,
-                    desc: "upload video error"
-                });
-                return next("query error" + err);
-            } else {
-                res.send({
-                    code: 0,
-                    desc: {
-                        vid: rows.insertId,
-                        pid: rows.insertId+1
+                })
+            }, function(err) {
+                console.log('Error: ' + err)
+            })
+        } else if (req.files.length == 2) {
+            if (arr[1][2].indexOf("video") >= 0) {
+                arr.reverse();
+                conn.query(addSQL, [arr], function(err, rows) {
+                    // console.log('video', rows);
+                    if (err) {
+                        res.send({
+                            code: 1,
+                            desc: "upload video error"
+                        });
+                        return next("query error" + err);
+                    } else {
+                        res.send({
+                            code: 0,
+                            desc: {
+                                vid: rows.insertId,
+                                pid: rows.insertId + 1
+                            }
+                        });
                     }
                 });
             }
-        });
+        }
     });
 });
 
@@ -106,7 +140,7 @@ addVideoInfo.post(function(req, res, next) {
         if (err) return next(err);
         let sql = "INSERT INTO videoinfo(`name`,`desc`,type,level1,level2,`index`,vid,pid) VALUES (?,?,?,?,?,?,?,?);";
 
-        conn.query(sql, [name, desc,type,level1,level2,index,vid,pid], function(err, rows) {
+        conn.query(sql, [name, desc, type, level1, level2, index, vid, pid], function(err, rows) {
             if (err) {
                 res.send({
                     code: 1,
@@ -123,6 +157,37 @@ addVideoInfo.post(function(req, res, next) {
     });
 });
 
+let setVideoInfo = router.route("/setvideoinfo");
+setVideoInfo.post(function(req, res, next) {
+    let name = req.query.name,
+        desc = req.query.desc,
+        type = req.query.type,
+        level1 = req.query.level1,
+        level2 = req.query.level2,
+        index = req.query.index,
+        vid = req.query.vid,
+        pid = req.query.pid,
+        id = req.query.id;
+    req.getConnection(function(err, conn) {
+        if (err) return next(err);
+        let sql = "UPDATE videoinfo SET `name` = ?,`desc` = ?,type = ?,level1 = ?,level2 = ?,`index` = ?,vid = ?,pid = ? WHERE id = ?;";
+
+        conn.query(sql, [name, desc, type, level1, level2, index, vid, pid, id], function(err, rows) {
+            if (err) {
+                res.send({
+                    code: 1,
+                    desc: "set video fail"
+                });
+                return next("query error" + err);
+            } else {
+                res.send({
+                    code: 0,
+                    desc: "set video success"
+                });
+            }
+        });
+    });
+});
 
 //-------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------
