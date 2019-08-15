@@ -14,16 +14,15 @@ let express = require("express"),
     }),
     upload = multer({ storage: storage });
 
-var uploadfile = router.route("/uploadfile");
+var uploadfile = router.route("/uploadvideofile");
 
 uploadfile.post(upload.array("file", 20), function(req, res, next) {
     req.getConnection(function(err, conn) {
         if (err) return next(err);
         let arr = [];
         for (let i in req.files) {
-            console.log("file", JSON.stringify(req.files));
+            // console.log("file", JSON.stringify(req.files));
             let metadata = [
-                req.files[i].fieldname,
                 req.files[i].originalname,
                 req.files[i].encoding,
                 req.files[i].mimetype,
@@ -33,23 +32,31 @@ uploadfile.post(upload.array("file", 20), function(req, res, next) {
             ];
             arr.push(metadata);
         }
+        if(req.files.length == 1) {
+            //获取第一帧图片
+        }else if (req.files.length == 2) {
+            if(arr[1].mimetype.indexOf("video") >= 0) {
+                arr.reverse();
+            }
+        }
 
-        let addSQL =
-            "INSERT INTO uploadfiles(fieldname, filename, encoding, mimetype, size, filepath, addTime) VALUES ?";
+        let addSQL = "INSERT INTO videofiles(filename, encoding, mimetype, size, filepath, addTime) VALUES ?";
 
         conn.query(addSQL, [arr], function(err, rows) {
+            console.log('video',rows);
             if (err) {
                 res.send({
                     code: 1,
-                    desc: "上传数据库异常"
+                    desc: "upload video error"
                 });
                 return next("query error" + err);
             } else {
-                // console.log('rows',rows);
-                // rows.insertId,rows.affectedRows,
                 res.send({
                     code: 0,
-                    desc: "上传成功"
+                    desc: {
+                        vid: rows.insertId,
+                        pid: rows.insertId+1
+                    }
                 });
             }
         });
@@ -84,6 +91,41 @@ removefile.get(function(req, res, next) {
         });
     });
 });
+
+let addVideoInfo = router.route("/addvideoinfo");
+addVideoInfo.post(function(req, res, next) {
+    let name = req.query.name,
+        desc = req.query.desc,
+        type = req.query.type,
+        level1 = req.query.level1,
+        level2 = req.query.level2,
+        index = req.query.index,
+        vid = req.query.vid,
+        pid = req.query.pid;
+    req.getConnection(function(err, conn) {
+        if (err) return next(err);
+        let sql = "INSERT INTO videoinfo(`name`,`desc`,type,level1,level2,`index`,vid,pid) VALUES (?,?,?,?,?,?,?,?);";
+
+        conn.query(sql, [name, desc,type,level1,level2,index,vid,pid], function(err, rows) {
+            if (err) {
+                res.send({
+                    code: 1,
+                    desc: "add video info fail"
+                });
+                return next("query error" + err);
+            } else {
+                res.send({
+                    code: 0,
+                    desc: rows.insertId
+                });
+            }
+        });
+    });
+});
+
+
+//-------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------
 
 let adstorage = multer.diskStorage({
         destination: function(req, file, cb) {
@@ -194,11 +236,39 @@ addAd.post(function(req, res, next) {
     });
 });
 
+let setAd = router.route("/setadinfo");
+setAd.post(function(req, res, next) {
+    let name = req.query.name,
+        position = req.query.position,
+        link = req.query.link,
+        picId = req.query.pid,
+        id = req.query.id;
+    req.getConnection(function(err, conn) {
+        if (err) return next(err);
+        let sql = "UPDATE adinfo SET `name` = ?,position = ?,link = ?,picid = ? WHERE id = ?;";
+
+        conn.query(sql, [name, position, link, picId, id], function(err, rows) {
+            if (err) {
+                res.send({
+                    code: 1,
+                    desc: "set ad fail"
+                });
+                return next("query error" + err);
+            } else {
+                res.send({
+                    code: 0,
+                    desc: "set ad success"
+                });
+            }
+        });
+    });
+});
+
 let getAds = router.route("/getadlist");
 getAds.get(function(req, res, next) {
     req.getConnection(function(err, conn) {
         if (err) return next(err);
-        let sql = "SELECT adinfo.*,adfiles.filename FROM	adinfo	LEFT JOIN adfiles ON adinfo.picid = adfiles.id";
+        let sql = "SELECT adinfo.*,adfiles.filename FROM adinfo	LEFT JOIN adfiles ON adinfo.picid = adfiles.id";
 
         conn.query(sql, [], function(err, rows) {
             if (err) {
