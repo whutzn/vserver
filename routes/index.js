@@ -12,6 +12,7 @@ module.exports = function(app) {
     app.use("/user", require("./user/login"));
 
     app.use("/admin", require("./business/invitecode"));
+    app.use("/admin", require("./business/sharecode"));
 
     app.use("/admin", require("./manage/login"));
     app.use("/admin", require("./manage/maininfo"));
