@@ -4,7 +4,8 @@ let express = require("express"),
 let getShareCode = router.route("/getsharecode");
 
 getShareCode.post(function(req, res, next) {
-  let id = req.query.id;
+  console.log('query',req.query,'body',req.body);
+  let id = req.query.id||req.body.id;
 
   req.getConnection(function(err, conn) {
     if (err) return next(err);
@@ -22,7 +23,7 @@ getShareCode.post(function(req, res, next) {
             if(err1) return next(err1);
             res.send({
               code: 0,
-              desc: code
+              desc: {code: code}
             });
           }); 
         }else {
@@ -49,12 +50,17 @@ function generateShareCode() {
 let bindShareCode = router.route("/bindsharecode");
 
 bindShareCode.post(function(req, res, next) {
-  let phone = req.query.phone,
-  code = req.query.code;
+  let phone = req.query.phone||req.body.phone,
+  code = req.query.code||req.body.code;
 
+  if(code == '') {
+    res.send({code:3,desc: 'no code' });
+    return;
+  }
+  
   req.getConnection(function(err, conn) {
     if (err) return next(err);
-    let querySql = "SELECT * FROM `user` WHERE phone = "+phone +" ;SELECT * FROM sharecode WHERE code = "+code+" ;";
+    let querySql = "SELECT * FROM `user` WHERE phone = '"+phone +"' ;SELECT * FROM sharecode WHERE code = '"+code+"' ;";
     conn.query(querySql,[],function(err,rows){
       if(err) return next(err);
       if(rows[0].length == 0) {
