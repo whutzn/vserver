@@ -9,8 +9,9 @@ let express = require("express"),
         },
         filename: function(req, file, cb) {
             // console.log('name',file.originalname);
-            // var str = file.originalname.split('.');
-            cb(null, file.originalname);
+            var tempStr = file.originalname.replace(/\s+/g, '');
+            var str = tempStr.split('.');
+            cb(null, str[0] + '-' + Date.now() + '.' + str[1]);
         }
     }),
     upload = multer({ storage: storage });
@@ -22,9 +23,9 @@ uploadVideoFile.post(upload.array("file"), function(req, res, next) {
         if (err) return next(err);
         let arr = [];
         for (let i in req.files) {
-            // console.log("file", JSON.stringify(req.files));
+            console.log("file", JSON.stringify(req.files));
             let metadata = [
-                req.files[i].originalname,
+                req.files[i].filename,
                 req.files[i].encoding,
                 req.files[i].mimetype,
                 req.files[i].size,
@@ -37,7 +38,7 @@ uploadVideoFile.post(upload.array("file"), function(req, res, next) {
             "INSERT INTO videofiles(filename, encoding, mimetype, size, filepath, addTime) VALUES ?";
         if (req.files.length == 1 && arr[0][2].indexOf("video") >= 0) {
             //获取第一帧图片
-            let process = new ffmpeg("./public/upload/" + req.files[0].originalname),
+            let process = new ffmpeg("./public/upload/" + req.files[0].filename),
                 picName = arr[0][0].split(".")[0];
             process.then(
                 function(video) {
@@ -68,7 +69,7 @@ uploadVideoFile.post(upload.array("file"), function(req, res, next) {
                                         });
                                     }
                                 });
-                            }
+                            } else console.log('create pic error!', error);
                         }
                     );
                 },
@@ -79,25 +80,25 @@ uploadVideoFile.post(upload.array("file"), function(req, res, next) {
         } else if (req.files.length == 2) {
             if (arr[1][2].indexOf("video") >= 0) {
                 arr.reverse();
-                conn.query(addSQL, [arr], function(err, rows) {
-                    // console.log('video', rows);
-                    if (err) {
-                        res.send({
-                            code: 1,
-                            desc: "upload video error"
-                        });
-                        return next("query error" + err);
-                    } else {
-                        res.send({
-                            code: 0,
-                            desc: {
-                                vid: rows.insertId,
-                                pid: rows.insertId + 1
-                            }
-                        });
-                    }
-                });
             }
+            conn.query(addSQL, [arr], function(err, rows) {
+                // console.log('video', rows);
+                if (err) {
+                    res.send({
+                        code: 1,
+                        desc: "upload video error"
+                    });
+                    return next("query error" + err);
+                } else {
+                    res.send({
+                        code: 0,
+                        desc: {
+                            vid: rows.insertId,
+                            pid: rows.insertId + 1
+                        }
+                    });
+                }
+            });
         }
     });
 });
@@ -108,7 +109,7 @@ removeVideoInfo.post(function(req, res, next) {
     req.getConnection(function(err, conn) {
         if (err) return next(err);
         let querySql =
-            "SELECT videofiles.filename FROM	videofiles	LEFT JOIN videoinfo ON videofiles.id = videoinfo.pid OR videofiles.id = videoinfo.vid WHERE videoinfo.id = ?";
+            "SELECT videofiles.filename FROM videofiles	LEFT JOIN videoinfo ON videofiles.id = videoinfo.pid OR videofiles.id = videoinfo.vid WHERE videoinfo.id = ?";
         conn.query(querySql, [id], function(err, rows1) {
             if (err) return next("query error" + err);
             fs.unlinkSync("./public/upload/" + rows1[0].filename);
@@ -224,8 +225,8 @@ getVideoList.get(function(req, res, next) {
                 return next("query error" + err);
             } else {
                 rows.forEach(element => {
-                    element.vname = "http://whutzn.vaiwan.com/upload/" + element.vname;
-                    element.pname = "http://whutzn.vaiwan.com/upload/" + element.pname;
+                    element.vname = "hhttp://103.103.68.83:3000/file/video/" + element.vname;
+                    element.pname = "http://103.103.68.83:3000/upload/" + element.pname;
                 });
                 res.send({
                     code: 0,
@@ -397,7 +398,7 @@ getAds.get(function(req, res, next) {
                 return next("query error" + err);
             } else {
                 rows.forEach(element => {
-                    element.filename = "http://whutzn.vaiwan.com/ads/" + element.filename;
+                    element.filename = "http://103.103.68.83:3000/ads/" + element.filename;
                 });
                 res.send({
                     code: 0,

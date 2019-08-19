@@ -3,9 +3,9 @@
  */
 function getDbConfig() {
     return {
-        host: 'localhost',
+        host: '103.103.68.83',
         port: 3306,
-        user: 'gisdb',
+        user: 'videodb',
         password: 'qq123456',
         database: 'gistest',
         multipleStatements: true

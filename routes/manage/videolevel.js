@@ -76,7 +76,7 @@ removeLevel1.post(function(req, res, next) {
     req.getConnection(function(err, conn) {
         if (err) return next(err);
 
-        let sql = "DELETE level2,level1 FROM	level2	LEFT JOIN level1 ON level2.parent = level1.id WHERE	level1.id = ?;";
+        let sql = "DELETE level2,level1 FROM level2	LEFT JOIN level1 ON level2.parent = level1.id WHERE	level1.id = ?;DELETE FROM level1 WHERE id = " + id + " ;";
 
         conn.query(sql, [id], function(err, rows) {
             if (err) return next("remove level1 error" + err);
