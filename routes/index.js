@@ -20,4 +20,6 @@ module.exports = function(app) {
     app.use("/admin", require("./manage/videolevel"));
     app.use("/admin/city", require("./manage/city"));
     app.use("/admin/info", require("./manage/admininfo"));
+
+    app.use("/file", require("./manage/videofile"));
 };

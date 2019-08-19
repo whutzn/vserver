@@ -68,7 +68,7 @@ uploadfile.post(upload.array("file", 20), function(req, res, next) {
                     });
                   }
                 });
-              }
+              }else console.error('jpg',error);
             }
           );
         },
