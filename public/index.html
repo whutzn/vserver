@@ -9,7 +9,9 @@
 <body>
     <div class="form-group">
         <label>Ajax上传图片</label>
-        <input type="file" name="file" id="file" multiple="multiple">
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" id="file" enctype="multipart/form-data" multiple="multiple">
+        </form>
         <p id="result"></p>
         <img id="img" src="">
     </div>
@@ -17,19 +19,20 @@
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
         function uploadFile() {
-            var file = document.getElementById("file")
+            var file = document.getElementById("file");
             var formData = new FormData();
             for (var i in file.files) { //这里如果单张上传就不必遍历直接formData.append('file',file.files[0])
                 console.log('file', file.files[i]);
                 formData.append('file', file.files[i]);
             }
             $.ajax({
-                url: 'http://localhost:3000/admin/uploadvideofile',
+                url: 'http://whutzn.vaiwan.com/admin/uploadvideofile',
                 type: 'POST',
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
+                timeout: 60 * 60 * 1000,
                 success: function(data) {
                     if (0 === data.code) {
                         $('#result').html("上传成功！");
