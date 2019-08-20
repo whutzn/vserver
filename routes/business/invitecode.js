@@ -60,8 +60,8 @@ getCode.get(function(req, res, next) {
 let bindCode = router.route("/bindinvitecode");
 
 bindCode.post(function(req, res, next) {
-  let uid = req.query.uid,
-  code = req.query.code;
+  let uid = req.query.uid||req.body.uid,
+  code = req.query.code||req.body.code;
 
   req.getConnection(function(err, conn) {
     if (err) return next(err);
@@ -71,14 +71,14 @@ bindCode.post(function(req, res, next) {
     conn.query(sql, [uid,code], function(err, rows) {
       if (err) return next("bind invite code error" + err);
       if(rows[0].affectedRows == 1) {
-        let vipsql = "UPDATE `user` SET vtime = DATE_ADD( vtime, INTERVAL 30 DAY ) WHERE id = "+ uid +" AND DATE_ADD( vtime, INTERVAL 1 DAY ) > NOW() ;UPDATE `user` SET vtime = DATE_ADD( NOW(), INTERVAL 30 DAY ) WHERE id = "+uid+ " AND (vtime < NOW() OR vtime IS NULL);";
+        let vipsql = "UPDATE `user` SET vtime = DATE_ADD( vtime, INTERVAL 30 DAY ) WHERE id = "+ uid +" AND DATE_ADD( vtime, INTERVAL 1 DAY ) > NOW() ;UPDATE `user` SET vtime = DATE_ADD( NOW(), INTERVAL 30 DAY ) WHERE id = "+uid+ " AND (vtime < NOW() OR vtime IS NULL);SELECT vtime FROM `user` WHERE id = "+uid+" ;";
         conn.query(vipsql,[], function(err, rows1){
           // console.log(rows1);
           if (err) return next("set code error" + err);
           res.send(
             JSON.stringify({
               code: 0,
-              desc: 'bind code success'
+              desc: rows1[2][0].vtime
             })
           );
         });

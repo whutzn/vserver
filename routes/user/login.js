@@ -5,14 +5,14 @@ let express = require("express"),
 let login = router.route("/login");
 
 login.post(function(req, res, next) {
-  let phone = req.query.phone,
-    password = req.query.password;
+  let phone = req.query.phone||req.body.phone,
+    password = req.query.password||req.body.password;
 
   req.getConnection(function(err, conn) {
     if (err) return next(err);
 
     let sql =
-      "SELECT id,password,DATE_ADD( vtime, INTERVAL 1 DAY ) AS ctime FROM user WHERE phone = ? ";
+      "SELECT id,password,vtime,DATE_ADD( vtime, INTERVAL 1 DAY ) AS ctime FROM user WHERE phone = ? ";
 
     conn.query(sql, [phone], function(err, rows1) {
       if (err) return next("login error" + err);
@@ -45,7 +45,8 @@ login.post(function(req, res, next) {
                   desc: {
                     id: rows1[0].id,
                     type: type,
-                    code: response.data.desc.code
+                    code: response.data.desc.code,
+                    time: rows1[0].vtime
                   }
                 })
               );

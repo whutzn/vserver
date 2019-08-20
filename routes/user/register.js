@@ -6,10 +6,12 @@ let express = require("express"),
 let register = router.route("/register");
 
 register.post(function(req, res, next) {
-  let phone = req.query.phone||req.body.phone,
-    password = req.query.password||req.body.password,
-    mode = req.query.mode||req.body.mode,
-    code = req.query.code||req.body.code||'';
+  let phone = req.body.phone||req.query.phone,
+    password = req.body.password||req.query.password,
+    mode = req.body.mode||req.query.mode,
+    code = req.body.code||req.query.code||'';
+
+    // console.log('query',req.query,'body',req.body);
 
   req.getConnection(function(err, conn) {
     if (err) return next(err);
