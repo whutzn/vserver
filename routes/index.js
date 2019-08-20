@@ -22,4 +22,5 @@ module.exports = function(app) {
     app.use("/admin/info", require("./manage/admininfo"));
 
     app.use("/file", require("./manage/videofile"));
+    app.use("/file", require("./business/download"));
 };

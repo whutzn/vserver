@@ -1,16 +1,15 @@
 {
-  "apps" : [{
-    "name" : "video_server",  
-    "script": "./bin/www", 
-    "cwd": "./",           
-    "watch":[
-		"bin",
-		"public",
-		"routes",
-		"views"
-	],
-    "error_file":"./logs/app-err.log",
-    "out_file":"./logs/app-out.log",  
-    "log_date_format":"YYYY-MM-DD HH:mm Z" 
+    "apps": [{
+        "name": "video_server",
+        "script": "./bin/www",
+        "cwd": "./",
+        "watch": [
+            "bin",
+            "routes",
+            "views"
+        ],
+        "error_file": "./logs/app-err.log",
+        "out_file": "./logs/app-out.log",
+        "log_date_format": "YYYY-MM-DD HH:mm Z"
     }]
 }

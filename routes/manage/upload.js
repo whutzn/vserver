@@ -103,9 +103,22 @@ uploadVideoFile.post(upload.array("file"), function(req, res, next) {
     });
 });
 
-var uploadVideoFile = router.route("/uploadvideosplitfile");
+let storage1 = multer.diskStorage({
+        destination: function(req, file, cb) {
+            cb(null, "./public/upload");
+        },
+        filename: function(req, file, cb) {
+            // console.log('name',file.originalname);
+            var tempStr = file.originalname.replace(/\s+/g, '');
+            var str = tempStr.split('.');
+            cb(null, str[0] + '-' + Date.now() + '.' + str[1]);
+        }
+    }),
+    upload1 = multer({ storage: storage1 });
 
-uploadVideoFile.post(upload.array("file"), function(req, res, next) {
+var uploadVideoSplitFile = router.route("/uploadvideosplitfile");
+
+uploadVideoSplitFile.post(upload1.array("file"), function(req, res, next) {
     req.getConnection(function(err, conn) {
         if (err) return next(err);
         let arr = [];
@@ -122,7 +135,7 @@ uploadVideoFile.post(upload.array("file"), function(req, res, next) {
             arr.push(metadata);
         }
         let addSQL = "INSERT INTO videofiles(filename, encoding, mimetype, size, filepath, addTime) VALUES ?";
-        
+
         conn.query(addSQL, [arr], function(err, rows) {
             // console.log('video', rows);
             if (err) {
@@ -135,7 +148,7 @@ uploadVideoFile.post(upload.array("file"), function(req, res, next) {
                 res.send({
                     code: 0,
                     desc: {
-                        id: rows.insertId 
+                        id: rows.insertId
                     }
                 });
             }
@@ -249,25 +262,29 @@ setVideoInfo.post(function(req, res, next) {
     });
 });
 
+
+
 let getVideoList = router.route("/getvideolist");
 getVideoList.post(function(req, res, next) {
-    let type = req.body.type||req.query.type||2;
-    let level1 = req.body.level1||req.query.level1||"";
-    let level2 = req.body.level2||req.query.level2||"";
+    // console.log('query', req.query, 'body', req.body);
+    let type = req.body.type || req.query.type || 2;
+    let level1 = req.body.level1 || req.query.level1 || "";
+    let level2 = req.body.level2 || req.query.level2 || "";
     req.getConnection(function(err, conn) {
         if (err) return next(err);
         let sql =
-        "SELECT m.id AS id,m.`name` AS `name`,m.`desc` AS `desc`,m.type AS type,m.level1 AS level1,m.level2 AS level2,n.filename AS vname,o.filename AS pname FROM videoinfo AS m INNER JOIN videofiles AS n ON m.vid = n.id	INNER JOIN videofiles AS o ON m.pid = o.id ";
-        if(type == 0||type == 1) {
-            sql += "WHERE m.type = "+ type +"";
-            sql += level1 == "" ? "": " AND level1 = '"+level1+"' ";
-            sql += level2 == "" ? "": " AND level2 = '"+level2+"' ";
-        }else {
-            if(level1 == "") {
-                sql += level2 == "" ? "": "WHERE level2 = '"+level2+"' ";
-            }else {
-                sql += " WHERE level1 = '"+level1+"' ";
-            }sql += level2 == "" ? "": " AND level2 = '"+level2+"' ";
+            "SELECT m.id AS id,m.`name` AS `name`,m.`desc` AS `desc`,m.type AS type,m.level1 AS level1,m.level2 AS level2,n.filename AS vname,o.filename AS pname FROM videoinfo AS m INNER JOIN videofiles AS n ON m.vid = n.id	INNER JOIN videofiles AS o ON m.pid = o.id ";
+        if (type == 0 || type == 1) {
+            sql += "WHERE m.type = " + type + "";
+            sql += level1 == "" ? "" : " AND level1 = '" + level1 + "' ";
+            sql += level2 == "" ? "" : " AND level2 = '" + level2 + "' ";
+        } else {
+            if (level1 == "") {
+                sql += level2 == "" ? "" : "WHERE level2 = '" + level2 + "' ";
+            } else {
+                sql += " WHERE level1 = '" + level1 + "' ";
+            }
+            sql += level2 == "" ? "" : " AND level2 = '" + level2 + "' ";
         }
 
         conn.query(sql, [], function(err, rows) {

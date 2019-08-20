@@ -5,8 +5,8 @@ var router = express.Router();
 var login = router.route("/login");
 
 login.post(function(req, res, next) {
-    var phone = req.query.account;
-    var password = req.query.password;
+    var phone = req.query.account || req.body.account;
+    var password = req.query.password || req.body.password;
 
     req.getConnection(function(err, conn) {
         if (err) return next(err);
@@ -57,14 +57,14 @@ getUserInfo.get(function(req, res, next) {
             rows.forEach(row => {
                 let element = {};
                 element.id = row.id,
-                element.phone = row.phone,
-                element.time = row.vtime,
-                element.type = 0;
-                if(element.time == null) {
+                    element.phone = row.phone,
+                    element.time = row.vtime,
+                    element.type = 0;
+                if (element.time == null) {
                     element.type = 0
-                }else {
-                    
-                    if( new Date(row.ctime) >= new Date()) {
+                } else {
+
+                    if (new Date(row.ctime) >= new Date()) {
                         element.type = 1;
                     }
                 }
