@@ -4,8 +4,13 @@ let express = require("express"),
 let generatecode = router.route("/generatecode");
 
 generatecode.post(function(req, res, next) {
-  console.log(req.body);
-  const num = req.query.num;
+  // console.log(req.body);
+  const num = req.query.num||req.body.num||0;
+
+  if(num == 0) {
+    res.send({ code: 1, desc: 'num is 0!!!' });
+    return;
+  }
 
   req.getConnection(function(err, conn) {
     if (err) return next(err);
@@ -21,7 +26,19 @@ generatecode.post(function(req, res, next) {
         if (err.hasOwnProperty("errno") && err.errno === 1062) {
           res.send({ code: 2, desc: "already generate code" });
         } else return next("generatecode error" + err);
-      } else res.send({ code: 0, desc: 'create code success!' });
+      } else {
+        let results = [],
+        insertId = rows.insertId;
+        arr.forEach(element => {
+          let result = {uid:null,usetime:null,output:0};
+          result.id = insertId;
+          result.code = element[0];
+          result.addtime = element[1]
+          results.push(result);
+          insertId ++;
+        });
+        res.send({ code: 0, desc: results });
+      }
     });
   });
 });
@@ -124,6 +141,34 @@ removeCode.post(function(req, res, next) {
             );
         });
     });
+});
+
+let outputCode = router.route("/outputinvitecode");
+
+outputCode.post(function(req, res, next) {
+
+  let setArr = req.body.list||req.query.list||'';
+
+  if(setArr == '') {
+    res.send({ code: 1, desc: 'num is 0!!!' });
+    return;
+  }
+
+  req.getConnection(function(err, conn) {
+    if (err) return next(err);
+
+    let sql = "UPDATE invitecode SET output = 1 WHERE id in ("+ setArr +");";
+
+    conn.query(sql, [], function(err, rows) {
+      if (err) return next("output invite code error" + err);
+      res.send(
+        JSON.stringify({
+          code: 0,
+          desc: 'output code success'
+        })
+      );
+    });
+  });
 });
 
 module.exports = router;
