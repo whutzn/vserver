@@ -9,9 +9,9 @@ let express = require("express"),
         },
         filename: function(req, file, cb) {
             // console.log('name',file.originalname);
-            var tempStr = file.originalname.replace(/\s+/g, '');
-            var str = tempStr.split('.');
-            cb(null, str[0] + '-' + Date.now() + '.' + str[1]);
+            // var tempStr = file.originalname.replace(/\s+/g, '');
+            var str = file.originalname.split('.');
+            cb(null, Date.now() + '.' + str[1]);
         }
     }),
     upload = multer({ storage: storage });
@@ -109,9 +109,9 @@ let storage1 = multer.diskStorage({
         },
         filename: function(req, file, cb) {
             // console.log('name',file.originalname);
-            var tempStr = file.originalname.replace(/\s+/g, '');
-            var str = tempStr.split('.');
-            cb(null, str[0] + '-' + Date.now() + '.' + str[1]);
+            // var tempStr = file.originalname.replace(/\s+/g, '');
+            var str = file.originalname.split('.');
+            cb(null, Date.now() + '.' + str[1]);
         }
     }),
     upload1 = multer({ storage: storage1 });

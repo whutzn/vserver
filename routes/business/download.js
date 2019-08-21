@@ -5,7 +5,7 @@ var router = express.Router();
 var download = router.route("/download");
 
 download.get(function(req, res) {
-    res.download("./public/apk/111.apk");
+    res.download("./public/apk/laoyouquan.apk");
 });
 
 module.exports = router;
