@@ -44,12 +44,17 @@ login.post(function(req, res, next) {
 
 var getUserInfo = router.route("/getuserinfo");
 
-getUserInfo.get(function(req, res, next) {
+getUserInfo.post(function(req, res, next) {
+    let key = req.body.key || req.query.key || '';
 
     req.getConnection(function(err, conn) {
         if (err) return next(err);
 
-        var sql = "SELECT	id,	phone,	vtime,	DATE_ADD( vtime, INTERVAL 1 DAY ) AS ctime FROM	`user`;";
+        var sql = "SELECT	id,	phone,	vtime,	DATE_ADD( vtime, INTERVAL 1 DAY ) AS ctime FROM	`user` ";
+
+        if(key != '') {
+            sql += "WHERE INSTR(phone,'"+ key +"') > 0 ;";
+        }
 
         conn.query(sql, [], function(err, rows) {
             if (err) return next("query user info error" + err);

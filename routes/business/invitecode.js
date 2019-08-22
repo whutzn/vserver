@@ -55,12 +55,17 @@ function generateUUID() {
 
 let getCode = router.route("/getinvitecode");
 
-getCode.get(function(req, res, next) {
+getCode.post(function(req, res, next) {
+  let key = req.body.key || req.query.key || '';
 
   req.getConnection(function(err, conn) {
     if (err) return next(err);
 
-    let sql = "SELECT * FROM invitecode ;";
+    let sql = "SELECT * FROM invitecode ";
+
+    if(key != '') {
+      sql += "WHERE INSTR(`code`,'"+ key +"') > 0 ;";
+    }
 
     conn.query(sql, [], function(err, rows) {
       if (err) return next("get invite code error" + err);
