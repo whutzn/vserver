@@ -299,8 +299,8 @@ getVideoList.post(function(req, res, next) {
                 return next("query error" + err);
             } else {
                 rows.forEach(element => {
-                    element.vname = "http://103.103.68.83:3000/upload/" + element.vname;
-                    element.pname = "http://103.103.68.83:3000/upload/" + element.pname;
+                    element.vname = "http://176.113.71.92:3000/upload/" + element.vname;
+                    element.pname = "http://176.113.71.92:3000/upload/" + element.pname;
                 });
                 res.send({
                     code: 0,
