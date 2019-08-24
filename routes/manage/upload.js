@@ -320,8 +320,8 @@ let adstorage = multer.diskStorage({
         },
         filename: function(req, file, cb) {
             // console.log('name',file.originalname);
-            // var str = file.originalname.split('.');
-            cb(null, file.originalname);
+            var str = file.originalname.split(".");
+            cb(null, Date.now() + "." + str[1]);
         }
     }),
     adupload = multer({ storage: adstorage });
@@ -335,7 +335,7 @@ uploadAdFile.post(adupload.array("file", 20), function(req, res, next) {
         for (let i in req.files) {
             // console.log("file", JSON.stringify(req.files));
             let metadata = [
-                req.files[i].originalname,
+                req.files[i].filename,
                 req.files[i].encoding,
                 req.files[i].mimetype,
                 req.files[i].size,
