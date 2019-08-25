@@ -271,10 +271,12 @@ getVideoList.post(function(req, res, next) {
     let type = req.body.type || req.query.type || 2;
     let level1 = req.body.level1 || req.query.level1 || "";
     let level2 = req.body.level2 || req.query.level2 || "";
+    let pageSize = req.body.pageSize || req.query.pageSize || "";
+    let pageNum = req.body.pageNum || req.query.pageNum || "";
     req.getConnection(function(err, conn) {
         if (err) return next(err);
         let sql =
-            "SELECT m.id AS id,m.`name` AS `name`,m.`desc` AS `desc`,m.type AS type,m.level1 AS level1,m.level2 AS level2,n.filename AS vname,o.filename AS pname FROM videoinfo AS m INNER JOIN videofiles AS n ON m.vid = n.id	INNER JOIN videofiles AS o ON m.pid = o.id ";
+            "SELECT m.id AS id,m.`name` AS `name`,m.`desc` AS `desc`,m.type AS type,m.level1 AS level1,m.level2 AS level2,n.filename AS vname,o.filename AS pname FROM videoinfo AS m INNER JOIN videofiles AS n ON m.vid = n.id INNER JOIN videofiles AS o ON m.pid = o.id ";
         if (type == 0 || type == 1) {
             sql += "WHERE m.type = " + type + "";
             sql += level1 == "" ? "" : " AND level1 = '" + level1 + "' ";
@@ -290,21 +292,29 @@ getVideoList.post(function(req, res, next) {
 
         sql += " ORDER BY id DESC";
 
+        if (pageNum != "" && pageSize != "") {
+            let start = (pageNum - 1) * pageSize;
+            sql += " LIMIT " + start + "," + pageSize;
+        }
+
+        sql += ";SELECT COUNT(*) AS count FROM videoinfo WHERE type = 1"
+
+        // console.log('sql', sql)
         conn.query(sql, [], function(err, rows) {
             if (err) {
                 res.send({
                     code: 1,
-                    desc: "get add fail"
+                    desc: "get video list fail"
                 });
                 return next("query error" + err);
             } else {
-                rows.forEach(element => {
+                rows[0].forEach(element => {
                     element.vname = "http://176.113.71.92:3000/upload/" + element.vname;
                     element.pname = "http://176.113.71.92:3000/upload/" + element.pname;
                 });
                 res.send({
                     code: 0,
-                    desc: rows
+                    desc: { list: rows[0], count: rows[1][0].count }
                 });
             }
         });
