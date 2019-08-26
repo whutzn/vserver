@@ -42,6 +42,36 @@ login.post(function(req, res, next) {
     });
 });
 
+// usr set pwd
+var setUsr = router.route("/setusr");
+
+setUsr.post(function(req, res, next) {
+    var password = req.query.password || req.body.password;
+
+    req.getConnection(function(err, conn) {
+        if (err) return next(err);
+
+        var sql = "UPDATE usr SET pwd = ? WHERE user = 'admin' ";
+
+        conn.query(sql, [password], function(err, rows) {
+            if (err) {
+                res.send(
+                    JSON.stringify({
+                        code: 1,
+                        desc: "set pwd error"
+                    })
+                );   
+                return next("login error" + err);
+            } else res.send(
+                JSON.stringify({
+                    code: 0,
+                    desc: "set pwd success"
+                })
+            );    
+        });
+    });
+});
+
 var getUserInfo = router.route("/getuserinfo");
 
 getUserInfo.post(function(req, res, next) {

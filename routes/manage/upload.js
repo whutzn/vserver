@@ -297,7 +297,7 @@ getVideoList.post(function(req, res, next) {
             sql += " LIMIT " + start + "," + pageSize;
         }
 
-        sql += ";SELECT COUNT(*) AS count FROM videoinfo WHERE type = 1"
+        sql += ";SELECT type, COUNT(*) AS count FROM videoinfo GROUP BY type ORDER BY type";
 
         // console.log('sql', sql)
         conn.query(sql, [], function(err, rows) {
@@ -314,7 +314,7 @@ getVideoList.post(function(req, res, next) {
                 });
                 res.send({
                     code: 0,
-                    desc: { list: rows[0], count: rows[1][0].count }
+                    desc: { list: rows[0], count: rows[1][1].count, count1: rows[1][0].count }
                 });
             }
         });
