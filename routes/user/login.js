@@ -40,10 +40,11 @@ login.post(function(req, res, next) {
           if (new Date(rows1[0].ctime) >= new Date()) type = 1;
           axios
             .post("http://localhost:3000/admin/getsharecode", {
-              id: rows1[0].id
+              id: rows1[0].id,
+              token: "laoyouquan1"
             })
             .then(function(response) {
-              let content = { msg: phone }, // 要生成token的主题信息
+              let content = { msg: phone , time: Date.now() }, // 要生成token的主题信息
               secretOrPrivateKey = "laoyouquan", // 这是加密的key（密钥）
               token = jwt.sign(content, secretOrPrivateKey, {
                 expiresIn: 60 * 60 * 24 // 24小时过期

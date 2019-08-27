@@ -1,16 +1,29 @@
 const log4js = require("./../logUtil");
 const logger = log4js.getLogger();
+jwt = require("jsonwebtoken");
 
 module.exports = function(app) {
     app.use(function(req, res, next) {
         logger.trace(req.method, req.url);
         console.log(req.url,req.headers["token"])
-        console.log('body', req.body.token ,'query', req.query.token ,'headers', req.headers["token"]);
-        if(req.headers["token"] == "eyJhbGciOiJIUzInR5cCI6IkpXVCJ9.eyJtc2ciOiIxMzI2NDcwMTIyNyIsImlhdCI6MTU2Njg4Mzk5MywiZXhwIjoxNTY2OTcwMzkzfQ.1F_OZzVGJrn67H8rDqBXhdiNmBI6ld_QoHWhsfIA") {
-            next();
+        // console.log('body', req.body.token ,'query', req.query.token ,'headers', req.headers["token"]);
+        let token = req.headers["token"] || req.body.token || req.query.token ;
+        console.log('token',token)
+        if(token) {
+            if(token == "laoyouquan1") {
+                next()
+            }else {
+                jwt.verify(token, "laoyouquan", function (err, decode) {
+                    if (err) {  //  时间失效的时候/ 伪造的token          
+                        res.send({code:401,msg:'no access'});
+                    } else {
+                        console.log(decode); 
+                        next();
+                    }
+                });
+            }
         }else {
-            res.status(401);
-            res.end();
+            res.send({code:401,msg:'no access'});
         }
     });
 
