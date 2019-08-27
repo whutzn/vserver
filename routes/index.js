@@ -4,8 +4,18 @@ const logger = log4js.getLogger();
 module.exports = function(app) {
     app.use(function(req, res, next) {
         logger.trace(req.method, req.url);
-        next();
+        console.log(req.url,req.headers["token"])
+        console.log('body', req.body.token ,'query', req.query.token ,'headers', req.headers["token"]);
+        if(req.headers["token"] == "eyJhbGciOiJIUzInR5cCI6IkpXVCJ9.eyJtc2ciOiIxMzI2NDcwMTIyNyIsImlhdCI6MTU2Njg4Mzk5MywiZXhwIjoxNTY2OTcwMzkzfQ.1F_OZzVGJrn67H8rDqBXhdiNmBI6ld_QoHWhsfIA") {
+            next();
+        }else {
+            res.status(401);
+            res.end();
+        }
     });
+
+    // app.use("/user",require("./business/verfiy"));
+    // app.use("/admin",require("./business/verfiy"));
 
     app.use("/user", require("./user/validatecode"));
     app.use("/user", require("./user/register"));
