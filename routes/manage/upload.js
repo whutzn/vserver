@@ -494,4 +494,36 @@ getAds.get(function(req, res, next) {
     });
 });
 
+//-------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------//
+
+let adstorage1 = multer.diskStorage({
+        destination: function(req, file, cb) {
+            cb(null, "./public/ads");
+        },
+        filename: function(req, file, cb) {
+            // console.log('name',file.originalname);
+            var str = file.originalname.split(".");
+            cb(null, "erweima.jpg");
+        }
+    }),
+    uploadqd = multer({ storage: adstorage1 });
+
+var uploadqdFile = router.route("/uploadqdcodefile");
+
+uploadqdFile.post(function(req, res, next) {
+    uploadqd.single("file")(req, res, function(err) {
+        if (err instanceof multer.MulterError) {
+            console.log('qd code1', err);
+        } else if (err) {
+            console.log('qd code2', err);
+        }
+        res.send({
+            code: 0,
+            desc: "http://103.103.68.83:3000/ads/erweima.jpg"
+        });
+
+    });
+});
+
 module.exports = router;

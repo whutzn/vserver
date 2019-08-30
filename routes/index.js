@@ -8,7 +8,7 @@ module.exports = function(app) {
         // console.log(req.url, req.headers["token"])
         // console.log('body', req.body.token ,'query', req.query.token ,'headers', req.headers["token"]);
         let token = req.headers["token"] || req.body.token || req.query.token;
-        if (req.url.indexOf('file') >= 0) token = "laoyouquan1";
+        if (req.url.indexOf('file') >= 0 || req.url.indexOf('ads') >= 0) token = "laoyouquan1";
         // console.log('token', token)
         if (token) {
             if (token == "laoyouquan1") {
