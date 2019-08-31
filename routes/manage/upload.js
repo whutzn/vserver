@@ -312,9 +312,20 @@ getVideoList.post(function(req, res, next) {
                     element.vname = "http://176.113.71.92:3000/upload/" + element.vname;
                     element.pname = "http://176.113.71.92:3000/upload/" + element.pname;
                 });
+                console.log(rows);
+                let count = 0,
+                    count1 = 0;
+                if (rows[1].length == 1) {
+                    if (rows[1][0].type == 1) {
+                        count = rows[1][0].count;
+                    } else count1 = rows[1][0].count;
+                } else if (rows[1].length == 2) {
+                    count = rows[1][1].count;
+                    count1 = rows[1][0].count;
+                }
                 res.send({
                     code: 0,
-                    desc: { list: rows[0], count: rows[1][1].count, count1: rows[1][0].count }
+                    desc: { list: rows[0], count: count, count1: count1 }
                 });
             }
         });

@@ -122,7 +122,7 @@ getUserInfo.post(function(req, res, next) {
                 JSON.stringify({
                     code: 0,
                     desc: result,
-                    count: rows[1][0].count
+                    count: rows[1][0].count || 0
                 })
             );
         });
