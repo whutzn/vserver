@@ -76,6 +76,10 @@ getCode.post(function(req, res, next) {
 
         sql += ";SELECT COUNT(*) AS count FROM invitecode ";
 
+        if (key != '') {
+            sql += "WHERE INSTR(`code`,'" + key + "') > 0  ";
+        }
+
         conn.query(sql, [], function(err, rows) {
             if (err) return next("get invite code error" + err);
             res.send(

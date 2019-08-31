@@ -95,6 +95,10 @@ getUserInfo.post(function(req, res, next) {
 
         sql += ";SELECT COUNT(*) AS count FROM user ";
 
+        if (key != '') {
+            sql += "WHERE INSTR(phone,'" + key + "') > 0 ";
+        }
+
         conn.query(sql, [], function(err, rows) {
             if (err) return next("query user info error" + err);
             let result = [];
